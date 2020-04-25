@@ -1,1 +1,1 @@
-# arbitrag calculator
+# arbitrage calculator
