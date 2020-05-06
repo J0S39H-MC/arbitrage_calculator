@@ -32,19 +32,11 @@ namespace IndexArb.Server
             DataService dataService1 = new DataService();
             TaskFactory taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
 
-            //var liborDataTask = taskFactory.StartNew(() => dataService.GetDataStream(DataSources.LiborSrc).Skip(1).Subscribe((data) => OnNextLiborData("libor  = " + data)));
-            ////var spotDataTask = taskFactory.StartNew(() => dataService.GetDataStream(DataSources.SpotSrc).Skip(1).Subscribe((data) => OnNextSpotData("spot  = " + data, DataType.Spot)));
-            ////var futuresDataTask = taskFactory.StartNew(() => dataService.GetDataStream(DataSources.FuturesSrc).Skip(1).Subscribe((data) => OnNextFuturesData(data+","+$"{ DataType.Future }", DataType.Future)));
-
-
             var spotPriceObservable = dataService.GetDataStream(100, 325).Skip(0).Subscribe((data) => OnNextSpotData("spot  = " + data, DataType.Spot));
             var futuresPriceObservable = dataService1.GetDataStream(100, 325).Skip(0).Subscribe((data) => OnNextFuturesData("future = " + data, DataType.Future));
 
-
-            //Task.WaitAll(spotDataTask, futuresDataTask, liborDataTask);
-
             Console.ReadLine();
-           
+
             DisposeResources();
         }
 
@@ -66,23 +58,16 @@ namespace IndexArb.Server
             };
             rabbitConnection = connectionFactory.CreateConnection();
             channel = rabbitConnection.CreateModel();
-            //////channel.QueueDeclare(queue: "hello",
-            //////                    durable: false,
-            //////                    exclusive: false,
-            //////                    autoDelete: false,
-            //////                    arguments: null);
         }
 
         private static object OnNextLiborData(string data)
         {
             Console.WriteLine(data);
-            ////barrier.SignalAndWait();
             return Unit.Default;
         }
 
         private static object OnNextSpotData(string data, DataType dataType)
         {
-            //barrier.SignalAndWait();
             Publish(data, dataType);
             Console.WriteLine(data);
             return Unit.Default;
@@ -90,7 +75,6 @@ namespace IndexArb.Server
 
         private static object OnNextFuturesData(string data, DataType dataType)
         {
-            //barrier.SignalAndWait();
             Publish(data, dataType);
             Console.WriteLine(data);
             return Unit.Default;
