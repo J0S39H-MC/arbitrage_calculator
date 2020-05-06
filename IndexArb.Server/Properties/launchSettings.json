@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IndexArb.Server": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
