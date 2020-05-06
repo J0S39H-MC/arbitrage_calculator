@@ -25,7 +25,7 @@ namespace IndexArb.Client
 
                 var consumer = new EventingBasicConsumer(channel);
 
-                // create a stream of trades from rabbitmq
+                // create a observable stream of RT prices from rabbitmq
                 var messages = Observable.FromEventPattern<BasicDeliverEventArgs>(consumer, nameof(consumer.Received));
                 var formattedMessages = messages.Select((deliveryArgs) =>
                                      {
@@ -48,7 +48,7 @@ namespace IndexArb.Client
 
                    return (action: actionType, price: theoreticalFuturePrice);
                });
-                //var combinedDisposable = combined.Subscribe(x => Console.WriteLine($"Theoretical Future Price : {x}"));
+
                 var combinedDisposable = combined.Subscribe(x =>
                 {
                     Console.WriteLine($"{x.action,5}    |  Theoretical Price: {Decimal.Round(Convert.ToDecimal(x.price), 4)}");
